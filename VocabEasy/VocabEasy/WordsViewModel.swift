@@ -15,9 +15,25 @@ class WordViewModel: ObservableObject {
     init() {
         loadWordsFromFirebase()
     }
+    
+    func getFirebaseToken() -> String? {
+        guard let token = Bundle.main.object(forInfoDictionaryKey: "FirebaseToken") as? String else {
+            print("Firebase token not found in Info.plist")
+            return nil
+        }
+        return token
+    }
+    
+    func getFirebaseURL() -> URL? {
+        let baseURL = "https://firebasestorage.googleapis.com/v0/b/cu2vw-12083.appspot.com/o/words.json?alt=media&token="
+        if let token = getFirebaseToken() {
+            return URL(string: baseURL + token)
+        }
+        return nil
+    }
 
     func loadWordsFromFirebase() {
-        guard let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/cu2vw-12083.appspot.com/o/words.json?alt=media&token=49ffc997-93e5-4129-a14e-f0d971baad06") else {
+        guard let url = getFirebaseURL() else {
             print("Invalid URL")
             return
         }
