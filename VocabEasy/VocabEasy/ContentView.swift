@@ -11,7 +11,7 @@ struct ContentView: View {
     @StateObject private var viewModel = WordViewModel()
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 16) {
             ZStack {
                 Color.blue
                     .ignoresSafeArea(edges: .top)
@@ -38,21 +38,50 @@ struct ContentView: View {
                                 .foregroundColor(.black)
                                 .padding(.top, 8)
 
-                            Button(action: {
-                                withAnimation {
-                                    viewModel.nextWord()
+                            HStack {
+                                Button(action: {
+                                    withAnimation {
+                                        viewModel.previousWord()
+                                    }
+                                }) {
+                                    Text("Previous Word")
+                                        .font(.headline)
+                                        .padding()
+                                        .frame(width: 150)
+                                        .background(viewModel.isRandom || viewModel.currentWordIndex == 0 ? Color.gray : Color.blue)
+                                                    .foregroundColor(viewModel.isRandom || viewModel.currentWordIndex == 0 ? Color.white.opacity(0.6) : Color.white)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(15)
                                 }
-                            }) {
-                                Text("Next Word")
-                                    .font(.headline)
-                                    .padding()
-                                    .frame(width: 150)
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                
-                                    .cornerRadius(15)
+                                .disabled(viewModel.isRandom || viewModel.currentWordIndex == 0)
+
+                                Button(action: {
+                                    withAnimation {
+                                        viewModel.nextWord()
+                                    }
+                                }) {
+                                    Text("Next Word")
+                                        .font(.headline)
+                                        .padding()
+                                        .frame(width: 150)
+                                        .background(Color.blue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(15)
+                                }
                             }
                             .padding(.top, 16)
+
+                            HStack {
+                                Text(viewModel.isRandom ? "Random Word" : "Ordered Word")
+                                    .foregroundColor(.black)
+                                
+                                Toggle("", isOn: $viewModel.isRandom)
+                                    .labelsHidden()
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                            }
                         } else {
                             Text("No words available")
                                 .font(.title)
@@ -64,6 +93,25 @@ struct ContentView: View {
                 }
             }
         }
+        .overlay(
+                    Button(action: {
+                        withAnimation {
+                            viewModel.resetToFirstWord()
+                        }
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.blue)
+                            .padding(10)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 4)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                )
     }
 }
 

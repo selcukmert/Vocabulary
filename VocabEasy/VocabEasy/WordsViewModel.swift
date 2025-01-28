@@ -9,27 +9,17 @@ import Foundation
 
 class WordViewModel: ObservableObject {
     @Published var words: [Word] = []
-    @Published var currentWordIndex: Int = 0
+    @Published var currentWordIndex: Int = 0 {
+        didSet {
+            saveCurrentWordIndex()
+        }
+    }
     @Published var isLoading: Bool = false
+    @Published var isRandom: Bool = false
 
     init() {
+        loadSavedWordIndex() // Son pozisyonu yükle
         loadWordsFromFirebase()
-    }
-    
-    func getFirebaseToken() -> String? {
-        guard let token = Bundle.main.object(forInfoDictionaryKey: "FirebaseToken") as? String else {
-            print("Firebase token not found in Info.plist")
-            return nil
-        }
-        return token
-    }
-    
-    func getFirebaseURL() -> URL? {
-        let baseURL = "https://firebasestorage.googleapis.com/v0/b/cu2vw-12083.appspot.com/o/words.json?alt=media&token="
-        if let token = getFirebaseToken() {
-            return URL(string: baseURL + token)
-        }
-        return nil
     }
 
     func loadWordsFromFirebase() {
@@ -65,15 +55,57 @@ class WordViewModel: ObservableObject {
         }
         task.resume()
     }
+    
+    func saveCurrentWordIndex() {
+        UserDefaults.standard.set(currentWordIndex, forKey: "LastWordIndex")
+    }
+
+    func loadSavedWordIndex() {
+        currentWordIndex = UserDefaults.standard.integer(forKey: "LastWordIndex")
+    }
 
     func nextWord() {
-        if !words.isEmpty {
-            currentWordIndex = (currentWordIndex + 1) % words.count
+        if isRandom {
+            currentWordIndex = Int.random(in: 0..<words.count)
+        } else {
+            if !words.isEmpty {
+                currentWordIndex = (currentWordIndex + 1) % words.count
+            }
         }
+    }
+
+    func previousWord() {
+        if !isRandom {
+            if !words.isEmpty && currentWordIndex > 0 {
+                currentWordIndex -= 1
+            }
+        }
+    }
+    
+    func resetToFirstWord() {
+        currentWordIndex = 0
+        isRandom = false
+        saveCurrentWordIndex()
     }
 
     func getCurrentWord() -> Word? {
         guard !words.isEmpty else { return nil }
         return words[currentWordIndex]
+    }
+
+    func getFirebaseToken() -> String? {
+        guard let token = Bundle.main.object(forInfoDictionaryKey: "FirebaseToken") as? String else {
+            print("Firebase token not found in Info.plist")
+            return nil
+        }
+        return token
+    }
+
+    func getFirebaseURL() -> URL? {
+        let baseURL = "https://firebasestorage.googleapis.com/v0/b/cu2vw-12083.appspot.com/o/words.json?alt=media&token="
+        if let token = getFirebaseToken() {
+            return URL(string: baseURL + token)
+        }
+        return nil
     }
 }
