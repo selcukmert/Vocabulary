@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 class WordViewModel: ObservableObject {
     @Published var words: [Word] = []
@@ -16,6 +17,7 @@ class WordViewModel: ObservableObject {
     }
     @Published var isLoading: Bool = false
     @Published var isRandom: Bool = false
+    private var speechSynthesizer = AVSpeechSynthesizer()
 
     init() {
         loadSavedWordIndex() // Son pozisyonu yükle
@@ -108,4 +110,12 @@ class WordViewModel: ObservableObject {
         }
         return nil
     }
+    
+    func speak(text: String, language: String) {
+            let utterance = AVSpeechUtterance(string: text)
+            utterance.voice = AVSpeechSynthesisVoice(language: language)
+            utterance.rate = 0.5
+
+            speechSynthesizer.speak(utterance)
+        }
 }

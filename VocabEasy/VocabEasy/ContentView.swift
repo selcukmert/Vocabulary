@@ -31,6 +31,7 @@ struct ContentView: View {
 
                         if let currentWord = viewModel.getCurrentWord() {
                             FlipCardView(word: currentWord)
+                                .environmentObject(viewModel)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                             Text("\(viewModel.currentWordIndex + 1) / \(viewModel.words.count)")

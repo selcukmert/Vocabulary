@@ -10,6 +10,7 @@ import SwiftUI
 struct FlipCardView: View {
     let word: Word
     @State private var isFlipped = false
+    @EnvironmentObject var viewModel: WordViewModel
 
     var body: some View {
         ZStack {
@@ -18,23 +19,29 @@ struct FlipCardView: View {
                 .frame(width: 300, height: 200)
                 .shadow(radius: 4)
 
-            if isFlipped {
-                Text(word.meaning)
-                    .font(.title)
-                    .foregroundColor(.blue)
-                    .padding()
-                    .frame(width: 300, height: 200)
-                    .background(Color.white)
-                    .cornerRadius(16)
-                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-            } else {
-                Text(word.word)
+            VStack {
+                Spacer()
+                
+                Text(isFlipped ? word.meaning : word.word)
                     .font(.largeTitle)
-                    .foregroundColor(.black)
-                    .padding()
-                    .frame(width: 300, height: 200)
-                    .background(Color.white)
-                    .cornerRadius(16)
+                    .foregroundColor(isFlipped ? .black : .black)
+                    .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+                    .padding(.bottom, 10)
+                
+                Button(action: {
+                    let textToSpeak = isFlipped ? word.meaning : word.word
+                    let language = isFlipped ? "tr-TR" : "en-US"
+                    viewModel.speak(text: textToSpeak, language: language)
+                }) {
+                    Image(systemName: "speaker.wave.2.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.blue)
+                        .padding()
+                }
+                .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+                
+                Spacer()
             }
         }
         .rotation3DEffect(
@@ -48,3 +55,6 @@ struct FlipCardView: View {
         }
     }
 }
+
+
+
