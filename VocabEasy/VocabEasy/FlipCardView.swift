@@ -36,7 +36,7 @@ struct FlipCardView: View {
                     Image(systemName: "speaker.wave.2.fill")
                         .resizable()
                         .frame(width: 30, height: 30)
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color(hex: "60a4a8"))
                         .padding()
                 }
                 .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
