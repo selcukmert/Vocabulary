@@ -11,7 +11,7 @@ import Combine
 
 class WordViewModel: ObservableObject {
     @Published var dicWords: [String: String] = [:]
-    @Published var filteredWords: [(key: String, value: String)] = []
+    @Published var filteredWords: [String: String] = [:]
     private var searchCancellable: AnyCancellable?
     @Published var words: [Word] = []
     @Published var currentWordIndex: Int = 0 {
@@ -92,32 +92,28 @@ class WordViewModel: ObservableObject {
         }
 
     func loadDictionary() {
-            if let url = Bundle.main.url(forResource: "dictionary", withExtension: "json") {
-                do {
-                    let data = try Data(contentsOf: url)
-                    dicWords = try JSONDecoder().decode([String: String].self, from: data)
-                } catch {
-                    print("Error loading dictionary: \(error)")
+            DispatchQueue.global(qos: .userInitiated).async { // Arka planda yükle
+                if let url = Bundle.main.url(forResource: "dictionary", withExtension: "json"),
+                   let data = try? Data(contentsOf: url),
+                   let json = try? JSONDecoder().decode([String: String].self, from: data) {
+                    DispatchQueue.main.async {
+                        self.dicWords = json
+                    }
                 }
-            } else {
-                print("⚠️ dictionary.json not found in bundle!")
             }
         }
-        
-    func search(query: String) {
-            searchCancellable?.cancel()
-            
+
+        func search(query: String) {
             guard query.count >= 3 else {
-                DispatchQueue.main.async {
-                    self.filteredWords = []
-                }
+                DispatchQueue.main.async { self.filteredWords = [:] }
                 return
             }
-        
-        let filtered = self.dicWords
-            .filter { $0.key.lowercased().contains(query.lowercased()) }
-            .map { ($0.key, $0.value) }
-        filteredWords = filtered
-        
-    }
+
+            DispatchQueue.global(qos: .userInitiated).async {
+                let results = self.dicWords.filter { $0.key.localizedCaseInsensitiveContains(query) }
+                DispatchQueue.main.async {
+                    self.filteredWords = results
+                }
+            }
+        }
 }

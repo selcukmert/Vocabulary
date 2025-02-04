@@ -35,7 +35,7 @@ struct ContentView: View {
                         .fill(Color.gray.opacity(0.3))
                         .frame(height: 1)
                         .shadow(color: Color.black.opacity(0.2), radius: 3, x: 0, y: -3)
-                        .padding(.bottom, 55)
+                        .padding(.bottom, 54)
                 }
                 .allowsHitTesting(false)
             }

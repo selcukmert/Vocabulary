@@ -26,7 +26,7 @@ struct DictionaryView: View {
             if !viewModel.filteredWords.isEmpty {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 10) {
-                        ForEach(viewModel.filteredWords, id: \.key) { word in
+                        ForEach(viewModel.filteredWords.sorted(by: { $0.key < $1.key }), id: \.key) { word in
                             VStack(alignment: .leading) {
                                 Text(word.key)
                                     .font(.headline)
