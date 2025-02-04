@@ -7,8 +7,12 @@
 
 import Foundation
 import AVFoundation
+import Combine
 
 class WordViewModel: ObservableObject {
+    @Published var dicWords: [String: String] = [:]
+    @Published var filteredWords: [(key: String, value: String)] = []
+    private var searchCancellable: AnyCancellable?
     @Published var words: [Word] = []
     @Published var currentWordIndex: Int = 0 {
         didSet {
@@ -86,4 +90,34 @@ class WordViewModel: ObservableObject {
 
             speechSynthesizer.speak(utterance)
         }
+
+    func loadDictionary() {
+            if let url = Bundle.main.url(forResource: "dictionary", withExtension: "json") {
+                do {
+                    let data = try Data(contentsOf: url)
+                    dicWords = try JSONDecoder().decode([String: String].self, from: data)
+                } catch {
+                    print("Error loading dictionary: \(error)")
+                }
+            } else {
+                print("⚠️ dictionary.json not found in bundle!")
+            }
+        }
+        
+    func search(query: String) {
+            searchCancellable?.cancel()
+            
+            guard query.count >= 3 else {
+                DispatchQueue.main.async {
+                    self.filteredWords = []
+                }
+                return
+            }
+        
+        let filtered = self.dicWords
+            .filter { $0.key.lowercased().contains(query.lowercased()) }
+            .map { ($0.key, $0.value) }
+        filteredWords = filtered
+        
+    }
 }
