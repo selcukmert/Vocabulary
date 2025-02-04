@@ -13,8 +13,8 @@ struct VocabEasyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SplashScreenView() // Uygulama açılışında SplashScreenView gösterilir
-                .environmentObject(viewModel) // ViewModel'i tüm alt görünümlere ilet
+            SplashScreenView()
+                .environmentObject(viewModel)
         }
     }
 }

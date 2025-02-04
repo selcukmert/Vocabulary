@@ -20,42 +20,26 @@ class WordViewModel: ObservableObject {
     private var speechSynthesizer = AVSpeechSynthesizer()
 
     init() {
-        loadSavedWordIndex() // Son pozisyonu yükle
-        loadWordsFromFirebase()
+        loadSavedWordIndex()
+        loadWordsFromLocalJSON()
     }
 
-    func loadWordsFromFirebase() {
-        guard let url = getFirebaseURL() else {
-            print("Invalid URL")
-            return
-        }
-
-        isLoading = true
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            DispatchQueue.main.async {
-                self.isLoading = false
-            }
-
-            if let error = error {
-                print("Failed to fetch data: \(error.localizedDescription)")
-                return
-            }
-
-            guard let data = data else {
-                print("No data received")
+    func loadWordsFromLocalJSON() {
+            guard let url = Bundle.main.url(forResource: "words", withExtension: "json") else {
+                print("❌ words.json bulunamadı!")
                 return
             }
 
             do {
+                let data = try Data(contentsOf: url)
                 let decodedWords = try JSONDecoder().decode([Word].self, from: data)
+                
                 DispatchQueue.main.async {
                     self.words = decodedWords
                 }
             } catch {
-                print("Failed to decode JSON: \(error.localizedDescription)")
+                print("❌ JSON okunurken hata oluştu: \(error.localizedDescription)")
             }
-        }
-        task.resume()
     }
     
     func saveCurrentWordIndex() {
@@ -93,22 +77,6 @@ class WordViewModel: ObservableObject {
     func getCurrentWord() -> Word? {
         guard !words.isEmpty else { return nil }
         return words[currentWordIndex]
-    }
-
-    func getFirebaseToken() -> String? {
-        guard let token = Bundle.main.object(forInfoDictionaryKey: "FirebaseToken") as? String else {
-            print("Firebase token not found in Info.plist")
-            return nil
-        }
-        return token
-    }
-
-    func getFirebaseURL() -> URL? {
-        let baseURL = "https://firebasestorage.googleapis.com/v0/b/cu2vw-12083.appspot.com/o/words.json?alt=media&token="
-        if let token = getFirebaseToken() {
-            return URL(string: baseURL + token)
-        }
-        return nil
     }
     
     func speak(text: String, language: String) {

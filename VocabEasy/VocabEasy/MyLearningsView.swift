@@ -7,9 +7,11 @@
 import SwiftUI
 
 struct MyLearningsView: View {
+    @StateObject private var viewModel = WordViewModel()
+    
     var body: some View {
         VStack {
-            Text("Settings Page")
+            Text("My Learnings")
                 .font(.largeTitle)
                 .padding()
             Spacer()
