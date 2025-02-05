@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		EF5FAACC2D5151C800447174 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = EF5FAACB2D5151C800447174 /* Lottie */; };
+		EFA8C4042D533B030069E447 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EFA8C4032D533B030069E447 /* FirebaseAnalytics */; };
+		EFA8C4062D533B030069E447 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = EFA8C4052D533B030069E447 /* FirebaseCrashlytics */; };
+		EFA8C4082D533D490069E447 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EFA8C4072D533D490069E447 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EFA8C4072D533D490069E447 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EFCE83072D467C8C009E82A1 /* VocabEasy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocabEasy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFCE83172D467C8D009E82A1 /* VocabEasyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VocabEasyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFCE83212D467C8D009E82A1 /* VocabEasyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VocabEasyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +73,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFA8C4062D533B030069E447 /* FirebaseCrashlytics in Frameworks */,
+				EFA8C4042D533B030069E447 /* FirebaseAnalytics in Frameworks */,
 				EF5FAACC2D5151C800447174 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,6 +103,7 @@
 				EFCE831A2D467C8D009E82A1 /* VocabEasyTests */,
 				EFCE83242D467C8D009E82A1 /* VocabEasyUITests */,
 				EFCE83082D467C8C009E82A1 /* Products */,
+				EFA8C4072D533D490069E447 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -131,6 +138,8 @@
 			name = VocabEasy;
 			packageProductDependencies = (
 				EF5FAACB2D5151C800447174 /* Lottie */,
+				EFA8C4032D533B030069E447 /* FirebaseAnalytics */,
+				EFA8C4052D533B030069E447 /* FirebaseCrashlytics */,
 			);
 			productName = VocabEasy;
 			productReference = EFCE83072D467C8C009E82A1 /* VocabEasy.app */;
@@ -216,6 +225,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				EF5FAACA2D5151C800447174 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				EFA8C4022D533B030069E447 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EFCE83082D467C8C009E82A1 /* Products */;
@@ -234,6 +244,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFA8C4082D533D490069E447 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,6 +617,14 @@
 				minimumVersion = 4.5.1;
 			};
 		};
+		EFA8C4022D533B030069E447 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.8.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -613,6 +632,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EF5FAACA2D5151C800447174 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		EFA8C4032D533B030069E447 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFA8C4022D533B030069E447 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		EFA8C4052D533B030069E447 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFA8C4022D533B030069E447 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
