@@ -132,21 +132,29 @@ class WordViewModel: ObservableObject {
     }
     
     func toggleFavorite(_ word: Word) {
-        // Önce ana listedeki kelimeyi güncelle
-        if let index = words.firstIndex(where: { $0.word == word.word }) {
-            words[index].isFavorite.toggle()
+        // Önce favorilerde olup olmadığını kontrol et
+        if let existingIndex = favoriteWords.firstIndex(where: { $0.word == word.word }) {
+            // Favorilerden çıkar
+            favoriteWords.remove(at: existingIndex)
             
-            if words[index].isFavorite {
-                // Favorilere ekle
-                favoriteWords.append(words[index])
-            } else {
-                // Favorilerden çıkar
-                favoriteWords.removeAll(where: { $0.word == word.word })
+            // Ana listedeki durumu güncelle
+            if let mainIndex = words.firstIndex(where: { $0.word == word.word }) {
+                words[mainIndex].isFavorite = false
             }
+        } else {
+            // Favorilere ekle
+            var updatedWord = word
+            updatedWord.isFavorite = true
+            favoriteWords.append(updatedWord)
             
-            saveFavorites()
-            objectWillChange.send()
+            // Ana listedeki durumu güncelle
+            if let mainIndex = words.firstIndex(where: { $0.word == word.word }) {
+                words[mainIndex].isFavorite = true
+            }
         }
+        
+        saveFavorites()
+        objectWillChange.send()
     }
     
     private func saveFavorites() {
@@ -156,6 +164,7 @@ class WordViewModel: ObservableObject {
     }
 
     func isFavorite(_ word: Word) -> Bool {
-        favoriteWords.contains(where: { $0.word == word.word })
+        // Sadece kelime eşleşmesine bak
+        return favoriteWords.contains(where: { $0.word == word.word })
     }
 }
