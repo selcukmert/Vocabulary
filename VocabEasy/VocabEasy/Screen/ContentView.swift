@@ -17,18 +17,28 @@ struct ContentView: View {
                 FlashcardView()
                     .tabItem {
                         Image(systemName: "book.fill")
-                        Text("Flashcards")
+                        Text("Flash Cards")
                     }
                 
                 DictionaryView()
                     .tabItem {
-                        Image(systemName: "graduationcap.fill")
+                        Image(systemName: "text.book.closed.fill")
                         Text("Dictionary")
+                    }
+                
+                FavoritesView()
+                    .tabItem {
+                        Image(systemName: "heart.fill")
+                        Text("Favorites")
                     }
             }
             .tint(Color(hex: "60a4a8"))
+            .onAppear {
+                // Sadece deaktif tab item rengini ayarla
+                UITabBar.appearance().unselectedItemTintColor = UIColor.gray.withAlphaComponent(0.5)
+            }
             
-            if !keyboard.isKeyboardVisible { // Klavye açıldığında gizle
+            if !keyboard.isKeyboardVisible {
                 VStack {
                     Spacer()
                     Rectangle()

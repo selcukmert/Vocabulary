@@ -6,15 +6,10 @@
 //
 
 import SwiftUI
-import Firebase
 
 @main
 struct VocabEasyApp: App {
     @StateObject private var viewModel = WordViewModel()
-    
-    init() {
-        FirebaseApp.configure()
-    }
 
     var body: some Scene {
         WindowGroup {
@@ -23,4 +18,3 @@ struct VocabEasyApp: App {
         }
     }
 }
-

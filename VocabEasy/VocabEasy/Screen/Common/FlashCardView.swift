@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FlashcardView: View {
-    @EnvironmentObject var viewModel: WordViewModel
+    @EnvironmentObject private var viewModel: WordViewModel
 
     var body: some View {
         VStack(spacing: 16) {
